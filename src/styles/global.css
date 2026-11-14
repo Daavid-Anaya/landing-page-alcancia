@@ -1,0 +1,491 @@
+@import 'tailwindcss';
+
+@custom-variant dark (@media (prefers-color-scheme: dark));
+
+@theme inline {
+  --font-sans: 'Hanken Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-positive: var(--positive);
+  --color-emergency: var(--emergency);
+  --color-coin: var(--coin);
+  --color-coin-edge: var(--coin-edge);
+  --shadow-panel: var(--panel-shadow);
+  --shadow-raised: var(--panel-shadow-raised);
+  --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Alcancía brand tokens, shared with the demo site (sitio-web/src/app/globals.css). */
+:root {
+  color-scheme: light dark;
+  --background: #f6f7f9;
+  --foreground: #1e1e2a;
+  --surface: #ffffff;
+  --muted: #eceef3;
+  --muted-foreground: #535461;
+  --primary: #4b5fe5;
+  --primary-foreground: #ffffff;
+  --primary-soft: #e6e9fc;
+  --border: #e0e2ea;
+  --input: #84869a;
+  --positive: #036e43;
+  --destructive: #c4262e;
+  --emergency: #12996b;
+  --coin: #f0b23e;
+  --coin-edge: #a66d0f;
+  --dim: color-mix(in oklab, var(--foreground) 48%, var(--background));
+  --panel-shadow: 0 1px 2px rgb(20 20 43 / 0.04), 0 2px 10px rgb(20 20 43 / 0.05);
+  --panel-shadow-raised: 0 2px 4px rgb(20 20 43 / 0.05), 0 14px 36px rgb(20 20 43 / 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0d0d13;
+    --foreground: #ededf3;
+    --surface: #1a1a24;
+    --muted: #262633;
+    --muted-foreground: #a3a3b3;
+    --primary: #8b98f5;
+    --primary-foreground: #14141c;
+    --primary-soft: #23264a;
+    --border: rgb(255 255 255 / 10%);
+    --input: rgb(255 255 255 / 42%);
+    --positive: #4cc38a;
+    --destructive: #ff8a8a;
+    --emergency: #3fc48d;
+    --coin: #f2b955;
+    --coin-edge: #8a5c0d;
+    /* Dark: shadows barely show, so depth comes from a 1px top highlight. */
+    --panel-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05), 0 1px 2px rgb(0 0 0 / 0.5);
+    --panel-shadow-raised: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 14px 36px rgb(0 0 0 / 0.5);
+  }
+}
+
+@layer base {
+  html {
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 md:px-8;
+  }
+
+  .section {
+    @apply py-20 md:py-28;
+  }
+
+  .eyebrow {
+    @apply text-sm font-medium tracking-wider text-primary uppercase;
+  }
+
+  .display {
+    @apply font-normal tracking-tight text-balance;
+    font-size: clamp(1.875rem, 1.25rem + 2.5vw, 3.25rem);
+    line-height: 1.1;
+  }
+
+  .lead {
+    @apply text-lg text-pretty text-muted-foreground md:text-xl;
+  }
+
+  .panel {
+    @apply rounded-2xl border border-border bg-surface p-5 shadow-panel md:p-6;
+  }
+
+  .btn {
+    @apply inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-full px-6 text-base font-medium whitespace-nowrap;
+    transition:
+      filter 200ms var(--ease-settle),
+      background-color 200ms var(--ease-settle),
+      transform 200ms var(--ease-settle);
+  }
+
+  .btn:active {
+    transform: scale(0.97);
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground shadow-panel hover:brightness-110;
+  }
+
+  .btn-ghost {
+    @apply border border-border bg-surface text-foreground hover:bg-muted;
+  }
+
+  .btn-sm {
+    @apply min-h-11 px-4 text-sm;
+  }
+
+  .icon {
+    @apply inline-flex shrink-0;
+  }
+
+  .icon-badge {
+    @apply inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-xl text-primary;
+  }
+
+  .skip-link {
+    @apply fixed top-3 left-3 z-50 -translate-y-20 rounded-full bg-primary px-4 py-2 text-primary-foreground;
+  }
+
+  .skip-link:focus {
+    @apply translate-y-0;
+  }
+
+  .text-link {
+    @apply font-medium text-primary underline underline-offset-4;
+  }
+}
+
+/* ---------- Illustrations ---------- */
+
+.coin-face {
+  fill: var(--coin);
+  stroke: var(--coin-edge);
+  stroke-width: 1.5;
+}
+
+.coin-ring {
+  fill: none;
+  stroke: var(--coin-edge);
+  stroke-opacity: 0.55;
+  stroke-width: 1.25;
+}
+
+.jar {
+  fill: color-mix(in oklab, var(--surface) 60%, transparent);
+  stroke: color-mix(in oklab, var(--foreground) 32%, transparent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.jar-emergency {
+  stroke: var(--emergency);
+}
+
+.jar-long-term {
+  stroke: var(--primary);
+}
+
+.hero-glow {
+  position: absolute;
+  inset: -20% -10% auto;
+  height: 46rem;
+  pointer-events: none;
+  background:
+    radial-gradient(42rem 26rem at 78% 30%, color-mix(in oklab, var(--primary) 20%, transparent), transparent 70%),
+    radial-gradient(30rem 20rem at 12% 8%, color-mix(in oklab, var(--coin) 14%, transparent), transparent 70%);
+}
+
+/* ---------- Calculator ---------- */
+
+.field {
+  @apply flex items-center gap-2 rounded-xl border border-input bg-background px-4 text-muted-foreground;
+  transition: border-color 200ms var(--ease-settle);
+}
+
+.field:focus-within {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.field:has([aria-invalid='true']) {
+  border-color: var(--destructive);
+}
+
+.field input {
+  @apply h-12 min-w-0 flex-1 bg-transparent text-lg text-foreground tabular-nums;
+}
+
+.field input:focus-visible {
+  outline: none;
+}
+
+.field-error {
+  @apply text-sm font-medium;
+  color: var(--destructive);
+}
+
+.choice span {
+  @apply flex min-h-12 cursor-pointer items-center justify-center rounded-xl border border-input bg-background px-2 text-center text-sm leading-tight font-medium sm:text-base;
+  transition:
+    background-color 200ms var(--ease-settle),
+    border-color 200ms var(--ease-settle),
+    color 200ms var(--ease-settle);
+}
+
+.choice input:checked + span {
+  @apply border-primary bg-primary text-primary-foreground;
+}
+
+.choice input:focus-visible + span {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.scenario-bar {
+  @apply h-2.5 origin-left rounded-full bg-primary;
+  transform: scaleX(var(--share, 1));
+  transition: transform 600ms var(--ease-settle);
+}
+
+.scenario-bar-low {
+  background: color-mix(in oklab, var(--primary) 55%, var(--surface));
+}
+
+.calculator-range {
+  transition: opacity 200ms var(--ease-settle);
+}
+
+.calculator-range.is-stale {
+  opacity: 0.45;
+}
+
+/* ---------- States that scripts toggle. Without scripts, everything is in its final state. ---------- */
+
+.step-dot {
+  @apply relative z-10 flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-primary bg-primary font-medium text-primary-foreground tabular-nums;
+  transition:
+    background-color 300ms var(--ease-settle),
+    color 300ms var(--ease-settle),
+    transform 300ms var(--ease-settle);
+}
+
+.motion [data-step]:not(.is-active) .step-dot {
+  @apply bg-background text-primary;
+  transform: scale(0.9);
+}
+
+.steps-line {
+  @apply absolute top-5 bottom-5 left-5 w-0.5 -translate-x-1/2 rounded-full bg-border;
+}
+
+.steps-line-fill {
+  @apply size-full origin-top rounded-full bg-primary;
+}
+
+.phase {
+  @apply rounded-xl border border-border p-4;
+  transition:
+    border-color 300ms var(--ease-settle),
+    background-color 300ms var(--ease-settle);
+}
+
+.motion .phase.is-active {
+  @apply border-primary bg-primary-soft;
+}
+
+.route-base {
+  fill: none;
+  stroke: color-mix(in oklab, var(--foreground) 30%, transparent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 1 11;
+}
+
+.route-progress {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+/* Tailwind translates with the `translate` property, so the pulse uses `scale` and both compose. */
+.route-node-badge {
+  transition: scale 400ms var(--ease-settle);
+}
+
+.motion .is-received .route-node-badge {
+  scale: 1.14;
+}
+
+.source-pill {
+  fill: var(--surface);
+  stroke: var(--border);
+  stroke-width: 1.5;
+}
+
+.source-slit {
+  fill: color-mix(in oklab, var(--foreground) 30%, transparent);
+}
+
+.goal-line {
+  stroke: var(--emergency);
+  stroke-width: 2;
+  stroke-dasharray: 5 6;
+  stroke-linecap: round;
+}
+
+.goal-badge {
+  fill: var(--emergency);
+}
+
+.goal-check {
+  fill: none;
+  stroke: var(--background);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Pockets stage: pinned on large screens while the coins fall. The script adds `is-pinned`. */
+.pockets-track.is-pinned {
+  height: 240vh;
+}
+
+.pockets-track.is-pinned .pockets-sticky {
+  position: sticky;
+  top: 0;
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+}
+
+.fee-bar-kept {
+  transform-origin: left;
+}
+
+.wave-path {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+details > summary {
+  list-style: none;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details[open] .faq-chevron {
+  transform: rotate(180deg);
+}
+
+.faq-chevron {
+  transition: transform 250ms var(--ease-settle);
+}
+
+/* ---------- Motion. Everything here is skipped with reduced motion. ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Scroll reveals: `.motion` is added by the script, so content never stays hidden without it. */
+  .motion [data-reveal] {
+    opacity: 0;
+    transform: translateY(1.5rem);
+    transition:
+      opacity 700ms var(--ease-settle),
+      transform 700ms var(--ease-settle);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .motion [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Problem sentence: words light up in reading order. */
+  .motion [data-word] {
+    color: var(--dim);
+    transition: color 300ms var(--ease-settle);
+  }
+
+  .motion [data-word].is-lit {
+    color: var(--foreground);
+  }
+
+  /* Hero entrance, on load. */
+  .hero-enter > * {
+    animation: rise 800ms var(--ease-settle) both;
+  }
+
+  .hero-enter > :nth-child(2) {
+    animation-delay: 90ms;
+  }
+
+  .hero-enter > :nth-child(3) {
+    animation-delay: 180ms;
+  }
+
+  .hero-enter > :nth-child(4) {
+    animation-delay: 270ms;
+  }
+
+  .coin-drop {
+    animation: coin-drop 900ms cubic-bezier(0.34, 1.25, 0.64, 1) both;
+    animation-delay: calc(var(--i) * 110ms + 350ms);
+  }
+
+  .coin-float {
+    animation: coin-float 3.2s ease-in-out infinite alternate;
+  }
+
+  .motion .fee-bar-kept {
+    transform: scaleX(0);
+    transition: transform 1.4s var(--ease-settle) 200ms;
+  }
+
+  .motion .is-in .fee-bar-kept {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+}
+
+@keyframes coin-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-340px);
+  }
+
+  40% {
+    opacity: 1;
+  }
+}
+
+@keyframes coin-float {
+  from {
+    transform: translateY(-6px);
+  }
+
+  to {
+    transform: translateY(8px);
+  }
+}

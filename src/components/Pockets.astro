@@ -1,0 +1,144 @@
+---
+import Coin from './Coin.astro';
+import { POCKETS, POCKET_ID, POCKET_PHASES } from '../data/content';
+
+interface Jar {
+  x0: number;
+  x1: number;
+  top: number;
+}
+
+// Stage geometry, in viewBox units (640 x 420).
+const BOTTOM = 390;
+const CORNER = 26;
+const EMERGENCY_JAR: Jar = { x0: 80, x1: 240, top: 210 };
+const LONG_TERM_JAR: Jar = { x0: 370, x1: 580, top: 170 };
+
+const jarPath = (jar: Jar) =>
+  `M ${jar.x0} ${jar.top} V ${BOTTOM - CORNER} a ${CORNER} ${CORNER} 0 0 0 ${CORNER} ${CORNER} H ${jar.x1 - CORNER} a ${CORNER} ${CORNER} 0 0 0 ${CORNER} ${-CORNER} V ${jar.top}`;
+const rimPath = (jar: Jar) =>
+  `M ${jar.x0 - 12} ${jar.top} H ${jar.x0 + 12} M ${jar.x1 - 12} ${jar.top} H ${jar.x1 + 12}`;
+
+// Where each coin rests inside its jar.
+const emergencySlots = [122, 160, 198].map((x) => ({ x, y: 367 }));
+const longTermSlots = [
+  ...[418, 456, 494, 532].map((x) => ({ x, y: 367 })),
+  ...[418, 456, 494, 532].map((x) => ({ x, y: 331 })),
+  ...[456, 494].map((x) => ({ x, y: 295 })),
+];
+
+// RN-03: ten coins split 3 and 7 (30 % and 70 %). Once the emergency goal is met, the next three all go to the long term.
+const SPLIT_ORDER = ['long', 'emergency', 'long', 'long', 'emergency', 'long', 'long', 'emergency', 'long', 'long'];
+const COINS_AFTER_GOAL = 3;
+
+let emergencyIndex = 0;
+let longTermIndex = 0;
+const coins = [
+  ...SPLIT_ORDER.map((pocket) =>
+    pocket === 'emergency' ? emergencySlots[emergencyIndex++] : longTermSlots[longTermIndex++],
+  ),
+  ...Array.from({ length: COINS_AFTER_GOAL }, () => longTermSlots[longTermIndex++]),
+];
+---
+
+<section id="bolsas" class="section" aria-labelledby="bolsas-titulo">
+  <!-- On large screens the stage stays pinned while the coins fall (see scripts/motion.ts). -->
+  <div class="pockets-track" data-pockets>
+    <div class="pockets-sticky">
+      <div class="container-page grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+        <div class="flex flex-col gap-6">
+          <p class="eyebrow">Dos bolsas</p>
+          <h2 id="bolsas-titulo" class="display">Tu dinero, disponible cuando lo necesitas</h2>
+          <p class="lead">Tu ahorro se divide en dos bolsas, para que una emergencia no acabe con tu retiro.</p>
+
+          <ol class="flex flex-col gap-3">
+            {
+              POCKET_PHASES.map((phase) => (
+                <li class="phase" data-phase>
+                  <p class="font-medium">{phase.title}</p>
+                  <p class="text-muted-foreground">{phase.body}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <div class="flex flex-col gap-4" data-pockets-stage>
+          <div class="relative">
+            <svg viewBox="0 0 640 420" class="h-auto w-full" aria-hidden="true">
+              <path d={jarPath(EMERGENCY_JAR)} class="jar jar-emergency"></path>
+              <path d={rimPath(EMERGENCY_JAR)} class="jar jar-emergency"></path>
+              <path d={jarPath(LONG_TERM_JAR)} class="jar jar-long-term"></path>
+              <path d={rimPath(LONG_TERM_JAR)} class="jar jar-long-term"></path>
+              <line x1="92" x2="228" y1="344" y2="344" class="goal-line"></line>
+
+              {coins.map((coin) => <Coin x={coin.x} y={coin.y} data-coin data-x={coin.x} data-y={coin.y} />)}
+
+              <!-- Drawn after the coins, so they come out from under it. -->
+              <rect x="220" y="14" width="200" height="48" rx="24" class="source-pill"></rect>
+              <rect x="285" y="54" width="70" height="5" rx="2.5" class="source-slit"></rect>
+
+              <g transform="translate(160 184)" data-goal-badge>
+                <circle r="15" class="goal-badge"></circle>
+                <path d="M -6.5 0.5 l 4.5 4.5 l 8.5 -9.5" class="goal-check"></path>
+              </g>
+            </svg>
+            <p
+              class="absolute top-[9%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-medium whitespace-nowrap sm:text-sm"
+            >
+              Tu aportación
+            </p>
+          </div>
+
+          <dl class="grid grid-cols-2 gap-4 text-center">
+            {
+              POCKETS.map((pocket) => (
+                <div class="flex flex-col-reverse">
+                  <dt class="text-sm text-muted-foreground">{pocket.name}</dt>
+                  <dd
+                    class:list={[
+                      'text-3xl font-normal tracking-tight tabular-nums md:text-4xl',
+                      pocket.id === POCKET_ID.EMERGENCY ? 'text-positive' : 'text-primary',
+                    ]}
+                  >
+                    {pocket.share}
+                  </dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-page mt-12 grid gap-4 md:mt-16 md:grid-cols-2">
+    {
+      POCKETS.map((pocket, i) => (
+        <article class="panel flex flex-col gap-2" data-reveal style={`--reveal-delay: ${i * 90}ms`}>
+          <h3 class="flex items-center gap-3 text-xl font-medium tracking-tight">
+            <span
+              class:list={['size-3 rounded-full', pocket.id === POCKET_ID.EMERGENCY ? 'bg-emergency' : 'bg-primary']}
+              aria-hidden="true"
+            />
+            {pocket.name}
+          </h3>
+          <dl class="flex flex-col divide-y divide-border">
+            <div class="flex flex-col gap-1 py-3 sm:flex-row sm:gap-6">
+              <dt class="shrink-0 text-sm text-muted-foreground sm:w-28 sm:pt-0.5">Para qué</dt>
+              <dd>{pocket.purpose}</dd>
+            </div>
+            <div class="flex flex-col gap-1 py-3 sm:flex-row sm:gap-6">
+              <dt class="shrink-0 text-sm text-muted-foreground sm:w-28 sm:pt-0.5">Dónde está</dt>
+              <dd>{pocket.where}</dd>
+            </div>
+            <div class="flex flex-col gap-1 pt-3 sm:flex-row sm:gap-6">
+              <dt class="shrink-0 text-sm text-muted-foreground sm:w-28 sm:pt-0.5">Cómo se saca</dt>
+              <dd>{pocket.withdraw}</dd>
+            </div>
+          </dl>
+        </article>
+      ))
+    }
+  </div>
+</section>

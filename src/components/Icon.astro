@@ -1,0 +1,18 @@
+---
+import { ICONS, type IconName } from '../data/icons';
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+
+// Decorative: the text next to each icon carries the meaning.
+const svg = ICONS[name]
+  .replace('width="24"', 'width="1em"')
+  .replace('height="24"', 'height="1em"')
+  .replace('<svg', '<svg aria-hidden="true" focusable="false"');
+---
+
+<span class:list={['icon', className]} set:html={svg} />

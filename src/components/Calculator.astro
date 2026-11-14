@@ -1,0 +1,150 @@
+---
+import Icon from './Icon.astro';
+import { LINKS } from '../data/site';
+import { ASSUMPTIONS, FREQUENCY, estimateSaving } from '../lib/projection';
+
+const DEFAULTS = { amount: 500, frequency: FREQUENCY.BIWEEKLY, age: 30 } as const;
+
+const FREQUENCIES = [
+  { value: FREQUENCY.WEEKLY, label: 'Cada semana' },
+  { value: FREQUENCY.BIWEEKLY, label: 'Cada quincena' },
+  { value: FREQUENCY.MONTHLY, label: 'Cada mes' },
+] as const;
+
+// Rendered on the server with the default values, so the range is visible before the script loads.
+const initial = estimateSaving({
+  amountMxnCents: DEFAULTS.amount * 100,
+  frequency: DEFAULTS.frequency,
+  currentAge: DEFAULTS.age,
+});
+if (!initial.ok) throw new Error('The default calculator values must produce an estimate');
+const { estimate } = initial;
+
+const whole = new Intl.NumberFormat('es-MX', { maximumFractionDigits: 0 });
+const money = (cents: number) => `$${whole.format(Math.round(cents / 100))}`;
+const lowShare = estimate.lowUsdCents / estimate.highUsdCents;
+const returnsRange = `entre ${ASSUMPTIONS.lowGrossAnnualReturnPercent} % y ${ASSUMPTIONS.highGrossAnnualReturnPercent} %`;
+---
+
+<section id="calculadora" class="section" aria-labelledby="calculadora-titulo">
+  <div class="container-page flex flex-col gap-10">
+    <div class="flex max-w-2xl flex-col gap-4">
+      <p class="eyebrow">Calculadora</p>
+      <h2 id="calculadora-titulo" class="display">¿Cuánto podrías juntar?</h2>
+      <p class="lead">Elige cuánto ahorrarías y cada cuándo. Siempre es un rango, no una promesa.</p>
+    </div>
+
+    <div class="panel grid gap-10 p-6 shadow-raised md:p-10 lg:grid-cols-2 lg:gap-14" data-calculator data-reveal>
+      <form class="flex flex-col gap-7" novalidate data-calculator-form>
+        <div class="flex flex-col gap-2">
+          <label for="calc-amount" class="font-medium">¿Cuánto ahorrarías cada vez?</label>
+          <div class="field">
+            <span aria-hidden="true">$</span>
+            <input
+              id="calc-amount"
+              name="amount"
+              type="text"
+              inputmode="decimal"
+              autocomplete="off"
+              value={DEFAULTS.amount}
+              aria-describedby="calc-amount-help calc-amount-error"
+            />
+            <span aria-hidden="true">pesos</span>
+          </div>
+          <p id="calc-amount-help" class="text-sm text-muted-foreground">En pesos. El mínimo es $50.</p>
+          <p id="calc-amount-error" class="field-error" role="alert" hidden></p>
+        </div>
+
+        <fieldset>
+          <legend class="mb-2 font-medium">¿Cada cuándo?</legend>
+          <div class="grid grid-cols-3 gap-2">
+            {
+              FREQUENCIES.map((frequency) => (
+                <label class="choice">
+                  <input
+                    type="radio"
+                    name="frequency"
+                    value={frequency.value}
+                    checked={frequency.value === DEFAULTS.frequency}
+                    class="sr-only"
+                  />
+                  <span>{frequency.label}</span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <div class="flex flex-col gap-2">
+          <label for="calc-age" class="font-medium">¿Cuántos años tienes?</label>
+          <div class="field">
+            <input
+              id="calc-age"
+              name="age"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              value={DEFAULTS.age}
+              aria-describedby="calc-age-error"
+            />
+            <span aria-hidden="true">años</span>
+          </div>
+          <p id="calc-age-error" class="field-error" role="alert" hidden></p>
+        </div>
+      </form>
+
+      <div class="flex flex-col gap-6">
+        <div class="calculator-range flex flex-col gap-2" data-calculator-range>
+          <p class="text-muted-foreground">A los 65 años podrías tener</p>
+          <!-- The numbers animate, so screen readers get the sentence below instead. -->
+          <p class="text-3xl leading-tight font-normal tracking-tight tabular-nums md:text-[2.5rem]" aria-hidden="true">
+            entre <span class="text-primary" data-out="lowMxn">{money(estimate.lowMxnCents)}</span>
+            {' '}y <span class="text-primary" data-out="highMxn">{money(estimate.highMxnCents)}</span>
+            {' '}<span class="text-xl text-muted-foreground">pesos</span>
+          </p>
+          <p class="text-muted-foreground tabular-nums" aria-hidden="true">
+            En dólares: entre <span data-out="lowUsd">{money(estimate.lowUsdCents)}</span>
+            {' '}y <span data-out="highUsd">{money(estimate.highUsdCents)}</span>.
+          </p>
+          <p class="sr-only" aria-live="polite" data-calculator-summary>
+            A los 65 años podrías tener entre {money(estimate.lowMxnCents)} y {money(estimate.highMxnCents)} pesos. En dólares,
+            entre {money(estimate.lowUsdCents)} y {money(estimate.highUsdCents)}.
+          </p>
+
+          <div class="mt-3 flex flex-col gap-2 text-sm text-muted-foreground" aria-hidden="true">
+            <div class="grid grid-cols-[7.5rem_1fr] items-center gap-3">
+              <span>Escenario bajo</span>
+              <div class="scenario-bar scenario-bar-low" style={`--share: ${lowShare.toFixed(4)}`} data-bar-low></div>
+            </div>
+            <div class="grid grid-cols-[7.5rem_1fr] items-center gap-3">
+              <span>Escenario alto</span>
+              <div class="scenario-bar" style="--share: 1"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl bg-muted p-4 text-sm">
+          <p class="mb-2 font-medium">Supuestos de esta estimación</p>
+          <ul class="flex list-disc flex-col gap-1 pl-5 text-muted-foreground">
+            <li>Ahorras lo mismo hasta los {ASSUMPTIONS.retirementAge} años.</li>
+            <li>Rendimiento de ejemplo: {returnsRange} al año, antes de la comisión.</li>
+            <li>Ya descontamos la comisión de {ASSUMPTIONS.fundAnnualFeePercent} % al año.</li>
+            <li>Tipo de cambio de ejemplo: ${ASSUMPTIONS.mxnPerUsd} pesos por dólar.</li>
+            <li>No considera la inflación.</li>
+          </ul>
+        </div>
+
+        <p class="text-sm text-muted-foreground">Es una estimación, no una promesa. Lo que obtengas puede ser menor.</p>
+
+        <a href={LINKS.register} class="btn btn-primary self-start">
+          Empezar a ahorrar
+          <Icon name="arrow-right" />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../scripts/calculator';
+</script>

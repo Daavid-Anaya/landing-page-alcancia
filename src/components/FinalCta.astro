@@ -1,0 +1,48 @@
+---
+import Coin from './Coin.astro';
+import Icon from './Icon.astro';
+import { LINKS } from '../data/site';
+---
+
+<section id="empezar" class="pb-20 md:pb-28" aria-labelledby="empezar-titulo">
+  <div class="container-page">
+    <div
+      class="relative flex flex-col items-start gap-6 overflow-hidden rounded-3xl bg-primary px-6 py-14 text-primary-foreground md:px-14 md:py-20"
+      data-reveal
+    >
+      <svg
+        viewBox="0 0 220 220"
+        class="pointer-events-none absolute -right-8 -bottom-10 w-44 opacity-90 md:right-6 md:w-64"
+        aria-hidden="true"
+      >
+        <Coin x={70} y={150} r={46} />
+        <Coin x={140} y={110} r={46} />
+        <Coin x={118} y={176} r={34} />
+      </svg>
+
+      <h2
+        id="empezar-titulo"
+        class="relative max-w-2xl font-normal tracking-tight text-balance"
+        style="font-size: clamp(2.25rem, 1.4rem + 3.6vw, 4rem); line-height: 1.05;"
+      >
+        Empieza hoy, con $50 pesos
+      </h2>
+      <p class="relative max-w-xl text-lg md:text-xl">Desde tu celular, sin trámites y sin descargar nada.</p>
+
+      <div class="relative flex flex-col gap-3 sm:flex-row">
+        <a href={LINKS.register} class="btn bg-background text-foreground hover:brightness-95">
+          Empezar a ahorrar
+          <Icon name="arrow-right" />
+        </a>
+        <a href={LINKS.whatsapp} class="btn border border-current hover:bg-white/10">
+          <Icon name="message-circle" />
+          Escríbenos por WhatsApp
+        </a>
+      </div>
+
+      <p class="relative max-w-md text-sm">
+        Solo te escribimos desde nuestro número oficial verificado. Cualquier otro es falso.
+      </p>
+    </div>
+  </div>
+</section>

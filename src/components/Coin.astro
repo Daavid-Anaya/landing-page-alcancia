@@ -1,0 +1,21 @@
+---
+interface Props {
+  x: number;
+  y: number;
+  r?: number;
+  /** Order in the hero drop animation. Omit for coins moved by GSAP. */
+  drop?: number;
+  class?: string;
+  [key: `data-${string}`]: string | number | undefined;
+}
+
+const { x, y, r = 17, drop, class: className, ...rest } = Astro.props;
+const ring = Math.round(r * 0.62 * 10) / 10;
+---
+
+<g class:list={['coin', className]} transform={`translate(${x} ${y})`} {...rest}>
+  <g class:list={[drop !== undefined && 'coin-drop']} style={drop !== undefined ? `--i:${drop}` : undefined}>
+    <circle r={r} class="coin-face"></circle>
+    <circle r={ring} class="coin-ring"></circle>
+  </g>
+</g>

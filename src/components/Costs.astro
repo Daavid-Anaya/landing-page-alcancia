@@ -1,0 +1,62 @@
+---
+import Icon from './Icon.astro';
+import { COSTS } from '../data/content';
+import { ASSUMPTIONS, annualFundFeeCents } from '../lib/projection';
+
+// RN-21: every cost in money. The example of the fee over a balance of $1,000 dollars.
+const EXAMPLE_BALANCE_CENTS = 100_000;
+const feeCents = annualFundFeeCents(EXAMPLE_BALANCE_CENTS);
+const dollars = (cents: number, digits: number) =>
+  `$${new Intl.NumberFormat('es-MX', { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(cents / 100)}`;
+---
+
+<section id="costos" class="section" aria-labelledby="costos-titulo">
+  <div class="container-page grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+    <div class="flex flex-col gap-6 lg:sticky lg:top-32 lg:self-start">
+      <p class="eyebrow">Costos a la vista</p>
+      <h2 id="costos-titulo" class="display">Sin letras chiquitas</h2>
+
+      <div class="panel flex flex-col gap-4" data-reveal>
+        <p class="flex items-baseline gap-2">
+          <span class="text-5xl font-normal tracking-tight text-primary tabular-nums md:text-6xl">
+            {ASSUMPTIONS.fundAnnualFeePercent} %
+          </span>
+          <span class="text-muted-foreground">al año sobre tu saldo</span>
+        </p>
+
+        <!-- The thin coin-colored tick at the end is the fee: 0.53 % of the balance, never thinner than 3px. -->
+        <div class="flex h-4 gap-0.5" aria-hidden="true">
+          <div class="fee-bar-kept flex-1 rounded-l-full bg-primary"></div>
+          <div class="min-w-[3px] rounded-r-sm bg-coin" style={`width: ${ASSUMPTIONS.fundAnnualFeePercent}%`}></div>
+        </div>
+
+        <dl class="flex flex-wrap justify-between gap-x-6 gap-y-2 text-sm">
+          <div class="flex flex-col">
+            <dt class="text-muted-foreground">Si tu saldo es de</dt>
+            <dd class="text-base font-medium tabular-nums">{dollars(EXAMPLE_BALANCE_CENTS, 0)} dólares</dd>
+          </div>
+          <div class="flex flex-col sm:text-right">
+            <dt class="text-muted-foreground">Pagas al año</dt>
+            <dd class="text-base font-medium tabular-nums">{dollars(feeCents, 2)} dólares</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <ul class="flex flex-col divide-y divide-border">
+      {
+        COSTS.map((cost, i) => (
+          <li class="flex items-start gap-4 py-6 first:pt-0 last:pb-0" data-reveal style={`--reveal-delay: ${i * 70}ms`}>
+            <span class="icon-badge">
+              <Icon name={cost.icon} />
+            </span>
+            <div class="flex flex-col gap-1">
+              <h3 class="text-lg font-medium tracking-tight">{cost.title}</h3>
+              <p class="text-muted-foreground">{cost.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

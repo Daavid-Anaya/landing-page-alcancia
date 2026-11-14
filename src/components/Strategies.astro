@@ -1,0 +1,60 @@
+---
+import { STRATEGIES, STRATEGIES_NOTICE } from '../data/content';
+
+const WIDTH = 240;
+const HEIGHT = 64;
+
+/**
+ * An illustrative wave with no upward or downward trend: it only shows how much the balance can move.
+ * It is not a result and is labeled as such (RN-13).
+ */
+function wavePath(amplitude: number): string {
+  const points: string[] = [];
+  for (let x = 0; x <= WIDTH; x += 6) {
+    const y = HEIGHT / 2 + amplitude * (0.62 * Math.sin(x / 15) + 0.38 * Math.sin(x / 5.5 + 1.7));
+    points.push(`${x} ${y.toFixed(1)}`);
+  }
+  return `M ${points.join(' L ')}`;
+}
+---
+
+<section id="estrategias" class="section border-y border-border bg-surface" aria-labelledby="estrategias-titulo">
+  <div class="container-page flex flex-col gap-10">
+    <div class="flex max-w-3xl flex-col gap-4">
+      <p class="eyebrow">Estrategias</p>
+      <h2 id="estrategias-titulo" class="display">Tu dinero se invierte según el riesgo que quieras tomar</h2>
+      <p class="lead">
+        Más riesgo significa que tu saldo puede subir más, pero también caer más. Con 5 preguntas te asignamos la
+        estrategia que va con tu perfil, y puedes cambiarla cuando quieras.
+      </p>
+    </div>
+
+    <ul class="grid gap-4 md:grid-cols-3">
+      {
+        STRATEGIES.map((strategy, i) => (
+          <li
+            class="flex flex-col gap-4 rounded-2xl border border-border bg-background p-5 md:p-6"
+            data-reveal
+            style={`--reveal-delay: ${i * 90}ms`}
+          >
+            <p class="text-sm font-medium text-primary">{strategy.level}</p>
+            <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} class="h-16 w-full" preserveAspectRatio="none" aria-hidden="true">
+              <line x1="0" x2={WIDTH} y1={HEIGHT / 2} y2={HEIGHT / 2} class="route-base" />
+              <path d={wavePath(strategy.amplitude)} class="wave-path" pathLength="1" data-wave />
+            </svg>
+            <div class="flex flex-1 flex-col gap-2">
+              <h3 class="text-xl font-medium tracking-tight">{strategy.title}</h3>
+              <p class="text-muted-foreground">{strategy.body}</p>
+            </div>
+            <p class="border-t border-border pt-4 text-sm text-muted-foreground">{strategy.name}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="flex max-w-3xl flex-col gap-2 text-sm text-muted-foreground">
+      <p>Las líneas ilustran qué tanto puede moverse tu saldo en cada perfil. No son resultados.</p>
+      <p>{STRATEGIES_NOTICE}</p>
+    </div>
+  </div>
+</section>

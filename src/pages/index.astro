@@ -1,0 +1,38 @@
+---
+import Audience from '../components/Audience.astro';
+import Calculator from '../components/Calculator.astro';
+import Costs from '../components/Costs.astro';
+import Family from '../components/Family.astro';
+import Faq from '../components/Faq.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import Pockets from '../components/Pockets.astro';
+import Problem from '../components/Problem.astro';
+import Security from '../components/Security.astro';
+import Strategies from '../components/Strategies.astro';
+import Layout from '../layouts/Layout.astro';
+import { SEO } from '../data/site';
+---
+
+<!-- Section order follows landing-page/contenido.md: each one answers a doubt of the end user. -->
+<Layout title={SEO.title} description={SEO.description}>
+  <Header />
+  <main id="contenido">
+    <Hero />
+    <Problem />
+    <HowItWorks />
+    <Calculator />
+    <Audience />
+    <Family />
+    <Pockets />
+    <Security />
+    <Costs />
+    <Strategies />
+    <Faq />
+    <FinalCta />
+  </main>
+  <Footer />
+</Layout>

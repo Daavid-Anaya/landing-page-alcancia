@@ -1,0 +1,76 @@
+---
+import Coin from './Coin.astro';
+import Icon from './Icon.astro';
+import { FAMILY_NOTE, FAMILY_POINTS } from '../data/content';
+
+// The route goes from the relative in the US (left) to the wallet in Mexico (right), in viewBox units (640 x 240).
+const ROUTE = 'M 90 180 C 200 30, 440 30, 550 180';
+---
+
+<section id="familia" class="section border-y border-border bg-surface" aria-labelledby="familia-titulo">
+  <div class="container-page grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+    <div class="flex flex-col gap-6">
+      <p class="eyebrow">Tu familia también aporta</p>
+      <h2 id="familia-titulo" class="display">Tu familia también puede ayudarte a ahorrar</h2>
+      <p class="lead">
+        Si tu hijo o tu hija vive en Estados Unidos, puede mandar dinero directo a tu cartera de ahorro, en lugar de que te
+        llegue para gastarlo.
+      </p>
+
+      <ul class="flex flex-col gap-4">
+        {
+          FAMILY_POINTS.map((point, i) => (
+            <li class="flex items-start gap-4" data-reveal style={`--reveal-delay: ${i * 70}ms`}>
+              <span class="icon-badge">
+                <Icon name={point.icon} />
+              </span>
+              <p>
+                <strong class="font-medium">{point.title}</strong>
+                <span class="text-muted-foreground"> {point.body}</span>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="text-sm text-muted-foreground">{FAMILY_NOTE}</p>
+    </div>
+
+    <!-- The coin travels along the route with the scroll (see scripts/motion.ts). -->
+    <figure class="mx-auto w-full max-w-xl pb-24" data-route>
+      <div class="relative">
+        <svg viewBox="0 0 640 240" class="h-auto w-full" aria-hidden="true">
+          <path d={ROUTE} class="route-base"></path>
+          <path d={ROUTE} class="route-progress" pathLength="1" data-route-path></path>
+          <Coin x={320} y={67.5} r={20} data-route-coin />
+        </svg>
+
+        <div class="absolute top-[75%] left-[14.06%]">
+          <span
+            class="route-node-badge absolute flex size-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background text-2xl text-primary shadow-panel"
+          >
+            <Icon name="plane" />
+          </span>
+          <p class="absolute top-10 w-28 -translate-x-1/2 text-center text-sm leading-snug">
+            Tu familiar, en Estados Unidos
+          </p>
+        </div>
+
+        <div class="absolute top-[75%] left-[85.94%]" data-route-target>
+          <span
+            class="route-node-badge absolute flex size-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-primary text-2xl text-primary-foreground shadow-raised"
+          >
+            <Icon name="wallet" />
+          </span>
+          <p class="absolute top-10 w-28 -translate-x-1/2 text-center text-sm leading-snug">
+            Tu cartera de ahorro, en México
+          </p>
+        </div>
+      </div>
+
+      <figcaption class="sr-only">
+        El dinero viaja de tu familiar en Estados Unidos directo a tu cartera de ahorro en México.
+      </figcaption>
+    </figure>
+  </div>
+</section>

@@ -1,0 +1,46 @@
+---
+import Icon from './Icon.astro';
+import { SECURITY_EXTRAS, SECURITY_RULES } from '../data/content';
+---
+
+<section id="seguridad" class="section border-y border-border bg-surface" aria-labelledby="seguridad-titulo">
+  <div class="container-page flex flex-col gap-10">
+    <div class="flex max-w-2xl flex-col gap-4">
+      <p class="eyebrow">Seguridad</p>
+      <h2 id="seguridad-titulo" class="display">Tu dinero solo sale a tu nombre</h2>
+      <p class="lead">Así te protegemos, en cada canal.</p>
+    </div>
+
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        SECURITY_RULES.map((rule, i) => (
+          <li
+            class="flex flex-col gap-3 rounded-2xl border border-border bg-background p-5 md:p-6"
+            data-reveal
+            style={`--reveal-delay: ${i * 70}ms`}
+          >
+            <span class="icon-badge">
+              <Icon name={rule.icon} />
+            </span>
+            <h3 class="text-lg font-medium tracking-tight">{rule.title}</h3>
+            <p class="text-muted-foreground">{rule.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="flex flex-col gap-4">
+      <h3 class="font-medium">Más protecciones</h3>
+      <ul class="grid gap-x-10 gap-y-4 md:grid-cols-2">
+        {
+          SECURITY_EXTRAS.map((extra, i) => (
+            <li class="flex items-start gap-3" data-reveal style={`--reveal-delay: ${i * 60}ms`}>
+              <Icon name={extra.icon} class="mt-1 text-xl text-primary" />
+              <span class="text-muted-foreground">{extra.text}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

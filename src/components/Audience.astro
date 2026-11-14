@@ -1,0 +1,27 @@
+---
+import Icon from './Icon.astro';
+import { PERSONAS } from '../data/content';
+---
+
+<section id="para-quien" class="section" aria-labelledby="para-quien-titulo">
+  <div class="container-page flex flex-col gap-10">
+    <div class="flex max-w-2xl flex-col gap-4">
+      <p class="eyebrow">Para quién</p>
+      <h2 id="para-quien-titulo" class="display">Hecho para ti, trabajes donde trabajes</h2>
+    </div>
+
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        PERSONAS.map((persona, i) => (
+          <li class="panel flex flex-col gap-3" data-reveal style={`--reveal-delay: ${i * 70}ms`}>
+            <span class="icon-badge">
+              <Icon name={persona.icon} />
+            </span>
+            <h3 class="text-lg font-medium tracking-tight">{persona.title}</h3>
+            <p class="text-muted-foreground">{persona.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

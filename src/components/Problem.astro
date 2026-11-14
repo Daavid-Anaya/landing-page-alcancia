@@ -1,0 +1,42 @@
+---
+import { PROBLEM } from '../data/content';
+
+const words = PROBLEM.title.split(' ');
+---
+
+<section id="problema" class="section" aria-labelledby="problema-titulo">
+  <div class="container-page flex flex-col gap-10 md:gap-14">
+    <p class="eyebrow">El problema</p>
+
+    <!-- Each word lights up with the scroll (see scripts/motion.ts). Without scripts the sentence reads as usual. -->
+    <h2
+      id="problema-titulo"
+      class="max-w-5xl font-normal tracking-tight text-balance"
+      style="font-size: clamp(2rem, 1.2rem + 3.4vw, 4rem); line-height: 1.08;"
+      data-words
+    >
+      {
+        words.map((word) => (
+          <>
+            <span data-word>{word}</span>{' '}
+          </>
+        ))
+      }
+    </h2>
+
+    <div class="grid gap-8 md:grid-cols-[1.35fr_1fr] md:items-start md:gap-16">
+      <p class="lead" data-reveal>{PROBLEM.body}</p>
+
+      <figure class="panel flex flex-col gap-3" data-reveal style="--reveal-delay: 120ms">
+        <p class="text-5xl font-normal tracking-tight text-primary tabular-nums md:text-6xl">
+          <span class="text-2xl text-muted-foreground md:text-3xl">Solo</span>
+          {' '}{PROBLEM.stat}
+        </p>
+        <figcaption class="flex flex-col gap-2">
+          <span>{PROBLEM.statLabel}</span>
+          <span class="text-sm text-muted-foreground">{PROBLEM.statSource}</span>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,38 @@
+---
+import { LINKS } from '../data/site';
+
+const FOOTER_LINKS = [
+  { href: '#como-funciona', label: 'Cómo funciona' },
+  { href: '#seguridad', label: 'Seguridad' },
+  { href: '#preguntas', label: 'Preguntas frecuentes' },
+  { href: LINKS.whatsapp, label: 'WhatsApp oficial' },
+] as const;
+---
+
+<footer class="border-t border-border py-10">
+  <div class="container-page flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+    <div class="flex max-w-md flex-col gap-2">
+      <p class="text-lg font-medium tracking-tight">Alcancía</p>
+      <p class="text-sm text-muted-foreground">
+        Esta es una demostración con cifras de ejemplo. Todavía no se maneja dinero real.
+      </p>
+    </div>
+
+    <nav aria-label="Pie de página">
+      <ul class="flex flex-wrap gap-x-2 gap-y-1">
+        {
+          FOOTER_LINKS.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="flex min-h-11 items-center rounded-full px-3 text-sm text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</footer>

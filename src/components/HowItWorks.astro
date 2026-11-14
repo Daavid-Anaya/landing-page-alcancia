@@ -1,0 +1,42 @@
+---
+import Icon from './Icon.astro';
+import { STEPS, STEPS_NOTE } from '../data/content';
+---
+
+<section id="como-funciona" class="section" aria-labelledby="como-funciona-titulo" data-steps>
+  <div class="container-page grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+    <div class="flex flex-col gap-5 lg:sticky lg:top-32 lg:self-start">
+      <p class="eyebrow">Cómo funciona</p>
+      <h2 id="como-funciona-titulo" class="display">Empezar es así de fácil</h2>
+      <p class="text-muted-foreground" data-reveal>{STEPS_NOTE}</p>
+    </div>
+
+    <div class="relative" data-steps-list>
+      <div class="steps-line" aria-hidden="true">
+        <div class="steps-line-fill" data-steps-fill></div>
+      </div>
+
+      <ol class="flex flex-col gap-6 md:gap-8">
+        {
+          STEPS.map((step, i) => (
+            <li class="flex gap-4 md:gap-6" data-step>
+              <span class="step-dot" aria-hidden="true">
+                {i + 1}
+              </span>
+              <div class="panel flex flex-1 flex-col gap-3 md:p-8">
+                <span class="icon-badge">
+                  <Icon name={step.icon} />
+                </span>
+                <h3 class="text-xl font-medium tracking-tight md:text-2xl">
+                  <span class="sr-only">Paso {i + 1}: </span>
+                  {step.title}
+                </h3>
+                <p class="text-muted-foreground">{step.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
