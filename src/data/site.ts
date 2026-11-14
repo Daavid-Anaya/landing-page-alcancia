@@ -6,7 +6,7 @@ const DEMO_URL = String(import.meta.env.PUBLIC_DEMO_URL ?? 'http://localhost:300
 
 export const LINKS = {
   /** Destination of every "Probar demo" button. */
-  demo: 'https://www.linkedin.com/in/david-villegas-anaya/',
+  demo: 'https://alcancia-opal.vercel.app/',
   whatsapp: `${DEMO_URL}/whatsapp`,
 } as const;
 

@@ -25,18 +25,30 @@ function initSmoothScroll(): void {
   gsap.ticker.lagSmoothing(0);
 }
 
+/**
+ * Reveals replay in both scroll directions: an element shows when it reaches the reading area and rewinds only once
+ * it is completely off screen, so the rewind is never visible.
+ * Two thresholds keep it stable: the hidden state moves the element 1.5rem down, which is less than the 10% bands
+ * between them, so it can never bounce between both states at an edge.
+ */
 function initReveals(): void {
-  const observer = new IntersectionObserver(
+  const show = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        entry.target.classList.add('is-in');
-        observer.unobserve(entry.target);
+        if (entry.isIntersecting) entry.target.classList.add('is-in');
       }
     },
-    { rootMargin: '0px 0px -10% 0px' },
+    { rootMargin: '-10% 0px -10% 0px' },
   );
-  document.querySelectorAll('[data-reveal]').forEach((element) => observer.observe(element));
+  const rewind = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) entry.target.classList.remove('is-in');
+    }
+  });
+  document.querySelectorAll('[data-reveal]').forEach((element) => {
+    show.observe(element);
+    rewind.observe(element);
+  });
 }
 
 /** Problem sentence: each word goes from dim to full color, in reading order. */
