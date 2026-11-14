@@ -35,6 +35,7 @@ Contenido de cada sección de la landing (títulos, textos y botones), antes de 
 | 10 | Estrategias | ¿Dónde está mi dinero? |
 | 11 | Preguntas frecuentes | Lo que quede pendiente |
 | 12 | Llamado final | Empezar |
+| 13 | Nuestro equipo | ¿Quién está detrás? |
 
 La calculadora va pronto, porque la validación con usuarios mostró que prefieren la tanda por la satisfacción inmediata (PRD §3): ver su número engancha. Después viene el bloque de confianza (bolsas, seguridad y costos), que responde a sus miedos reales.
 
@@ -291,6 +292,20 @@ La calculadora va pronto, porque la validación con usuarios mostró que prefier
 
 **Nota:** Nuestro único número oficial es [por definir]. Cualquier otro es falso.
 
+**Código QR:** solo en pantallas grandes, a la derecha: "Escanea con tu celular para abrir la demo". El archivo es `public/qr-demo.svg` y abre `https://qr.link/mtsyqz`, que redirige a `https://alcancia-opal.vercel.app/`.
+
+---
+
+## 13. Nuestro equipo
+
+**Objetivo:** mostrar quién está detrás de Alcancía.
+
+**Título:** Cuatro perfiles, una visión compartida.
+
+**Contenido:** presentación del equipo y una tarjeta por integrante con especialidad, formación, perfil profesional y contacto (correo, teléfono y LinkedIn). Los textos completos están en `src/data/content.ts` (`TEAM_INTRO` y `TEAM`).
+
+**Integrantes:** Luis Jonathan Orihuela Genis · Juan David Villegas Anaya · José Adolfo Ramírez Acevedo · Daniel Lorenzo Sánchez Ramírez
+
 ---
 
 ## Pie de página
@@ -307,6 +322,7 @@ La calculadora va pronto, porque la validación con usuarios mostró que prefier
 - [ ] Número oficial de WhatsApp y dominio, que se usan en las secciones 8 y 12. Mientras tanto, la landing dice "nuestro número oficial verificado", sin mostrar un número.
 - [ ] A dónde lleva **Empezar a ahorrar**: ¿al registro del sitio demo (`sitio-web`) o a una lista de espera? Por ahora, **Empezar a ahorrar** lleva a `/registro` y **Escríbenos por WhatsApp** a `/whatsapp` del sitio demo. La dirección base se cambia con la variable `PUBLIC_DEMO_URL`.
 - [x] Supuestos de la calculadora: los mismos ejemplos del sitio demo (`sitio-web/src/domain/projection.ts`). Rendimiento de entre 2 % y 6 % al año antes de la comisión, comisión de 0.53 % y tipo de cambio de $18.45 pesos por dólar.
+- [ ] Confirmar el teléfono de José Adolfo Ramírez Acevedo (sección 13). Mientras tanto, su tarjeta no muestra teléfono.
 - [ ] Validar con el equipo los títulos de las tarjetas de riesgo de la sección 10.
 - [ ] Revisar si TAVAN debe seguir como "riesgo moderado": su peor caída en el backtest fue de −64 % (RN-10), lo que no cuadra con "un punto medio".
 - [ ] Muchos usuarios temen al SAT (PRD §3). Falta saber, con el socio o con revisión legal, qué se le puede decir sobre eso antes de agregarlo a las preguntas frecuentes.

@@ -1,0 +1,97 @@
+---
+import Icon from './Icon.astro';
+import { TEAM, TEAM_INTRO } from '../data/content';
+import { publicPath } from '../data/site';
+
+const CONTACT_LINK =
+  'flex min-h-11 items-center gap-3 rounded-lg text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground';
+
+/** Mexican numbers: country code 52 plus the 10 digits. */
+const telHref = (phone: string) => `tel:+52${phone.replace(/\D/g, '')}`;
+---
+
+<section id="equipo" class="section border-t border-border bg-surface" aria-labelledby="equipo-titulo">
+  <div class="container-page flex flex-col gap-10">
+    <div class="flex max-w-3xl flex-col gap-4">
+      <p class="eyebrow">Nuestro equipo</p>
+      <h2 id="equipo-titulo" class="display">{TEAM_INTRO.title}</h2>
+      <p class="lead">{TEAM_INTRO.lead}</p>
+      {TEAM_INTRO.body.map((paragraph) => <p class="text-pretty text-muted-foreground">{paragraph}</p>)}
+    </div>
+
+    <ul class="grid gap-4 md:grid-cols-2">
+      {
+        TEAM.map((member, i) => (
+          <li
+            class="flex flex-col gap-5 rounded-2xl border border-border bg-background p-5 md:p-6"
+            data-reveal
+            style={`--reveal-delay: ${(i % 2) * 70}ms`}
+          >
+            <div class="flex items-center gap-4">
+              {member.photo ? (
+                <img
+                  src={publicPath(`profile/${member.photo}`)}
+                  alt={`Foto de ${member.name}`}
+                  width="800"
+                  height="800"
+                  loading="lazy"
+                  decoding="async"
+                  class="size-20 shrink-0 rounded-2xl border border-border object-cover"
+                />
+              ) : (
+                <span class="icon-badge size-20 rounded-2xl text-3xl">
+                  <Icon name={member.icon} />
+                </span>
+              )}
+              <div class="flex flex-col gap-1">
+                <h3 class="text-lg font-medium tracking-tight">{member.name}</h3>
+                <p class="text-sm font-medium text-primary">{member.specialty}</p>
+              </div>
+            </div>
+
+            <ul class="flex flex-col gap-2 text-sm">
+              {member.education.map((item) => (
+                <li class="flex flex-col">
+                  <span class="font-medium">{item.degree}</span>
+                  <span class="text-muted-foreground">{item.institution}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div class="flex flex-col gap-3">
+              {member.profile.map((paragraph) => (
+                <p class="text-pretty text-muted-foreground">{paragraph}</p>
+              ))}
+            </div>
+
+            <ul class="mt-auto flex flex-col border-t border-border pt-3">
+              <li>
+                <a href={`mailto:${member.email}`} class={CONTACT_LINK}>
+                  <Icon name="mail" class="text-lg text-primary" />
+                  <span class="break-all">{member.email}</span>
+                </a>
+              </li>
+              {member.phone && (
+                <li>
+                  <a href={telHref(member.phone)} class={CONTACT_LINK}>
+                    <Icon name="phone" class="text-lg text-primary" />
+                    <span class="tabular-nums">{member.phone}</span>
+                  </a>
+                </li>
+              )}
+              <li>
+                <a href={member.linkedin} target="_blank" rel="noopener noreferrer" class={CONTACT_LINK}>
+                  <Icon name="external-link" class="text-lg text-primary" />
+                  <span>
+                    LinkedIn
+                    <span class="sr-only"> de {member.name} (se abre en una pestaña nueva)</span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

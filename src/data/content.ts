@@ -272,3 +272,112 @@ export const FAQ: readonly Question[] = [
     answer: 'No. Las cifras de las estrategias son resultados hipotéticos. Nunca prometemos ganarle al mercado.',
   },
 ];
+
+export interface Education {
+  readonly degree: string;
+  readonly institution: string;
+}
+
+export interface TeamMember {
+  /** Fallback when there is no photo. */
+  readonly icon: IconName;
+  /** File name inside `public/profile`. */
+  readonly photo?: string;
+  readonly name: string;
+  readonly specialty: string;
+  readonly education: readonly Education[];
+  readonly profile: readonly string[];
+  readonly email: string;
+  /** Display format. Omitted while the number is not confirmed. */
+  readonly phone?: string;
+  readonly linkedin: string;
+}
+
+export const TEAM_INTRO = {
+  title: 'Cuatro perfiles, una visión compartida.',
+  lead: 'Somos un equipo multidisciplinario integrado por estudiantes universitarios y de posgrado, con formación en finanzas, ciencias de la computación, actuaría y banca.',
+  body: [
+    'Nuestra diversidad académica y profesional nos permite abordar los desafíos financieros desde distintas perspectivas, combinando análisis cuantitativo, desarrollo tecnológico y estrategia empresarial.',
+    'Buscamos desarrollar soluciones financieras accesibles, funcionales y sostenibles, utilizando la tecnología como herramienta para mejorar la relación de las personas con sus finanzas.',
+  ],
+} as const;
+
+export const TEAM: readonly TeamMember[] = [
+  {
+    icon: 'chart-line',
+    photo: 'Johnny.jpeg',
+    name: 'Luis Jonathan Orihuela Genis',
+    specialty: 'Dirección Financiera',
+    education: [
+      {
+        degree: 'Estudiante de la Licenciatura en Dirección Financiera',
+        institution: 'Universidad Anáhuac Puebla',
+      },
+    ],
+    profile: [
+      'Estudiante de Dirección Financiera con formación orientada a la planeación financiera, evaluación de proyectos y análisis de decisiones empresariales. Su perfil aporta una perspectiva económica y estratégica al desarrollo de Alcancía, particularmente en la evaluación de modelos de negocio y viabilidad financiera.',
+    ],
+    email: 'Jonathan.orihuela@anahuac.mx',
+    phone: '735 205 6641',
+    linkedin: 'https://www.linkedin.com/in/jonathan-orihuela-genis/',
+  },
+  {
+    icon: 'code-xml',
+    photo: 'David.jpeg',
+    name: 'Juan David Villegas Anaya',
+    specialty: 'Desarrollo de Software y Tecnología',
+    education: [
+      {
+        degree: 'Estudiante de la Licenciatura en Ciencias de la Computación',
+        institution: 'Benemérita Universidad Autónoma de Puebla (BUAP)',
+      },
+    ],
+    profile: [
+      'Estudiante de Ciencias de la Computación con conocimientos en programación, desarrollo de software e infraestructura tecnológica. Su formación contribuye al diseño y desarrollo de soluciones digitales, integración de sistemas y construcción de herramientas tecnológicas orientadas a resolver problemas financieros.',
+    ],
+    email: 'daavidanaya@gmail.com',
+    phone: '222 207 1940',
+    linkedin: 'https://www.linkedin.com/in/david-villegas-anaya/',
+  },
+  {
+    icon: 'sigma',
+    name: 'José Adolfo Ramírez Acevedo',
+    specialty: 'Actuaría y Análisis Cuantitativo',
+    education: [
+      {
+        degree: 'Estudiante de la Licenciatura en Actuaría',
+        institution: 'Benemérita Universidad Autónoma de Puebla (BUAP)',
+      },
+    ],
+    profile: [
+      'Estudiante de Actuaría con formación en matemáticas aplicadas, probabilidad, estadística y análisis de riesgos. Su perfil aporta una perspectiva cuantitativa para la evaluación de escenarios financieros, el análisis de datos y el desarrollo de modelos orientados a respaldar decisiones financieras.',
+    ],
+    email: 'joses650279@gmail.com',
+    // PENDING: phone number not confirmed yet, so it is not published.
+    linkedin: 'https://www.linkedin.com/in/jos%C3%A9-r-914a2b410/',
+  },
+  {
+    icon: 'landmark',
+    photo: 'Daniel.jpeg',
+    name: 'Daniel Lorenzo Sánchez Ramírez',
+    specialty: 'Banca, Mercados Financieros y Estrategia Empresarial',
+    education: [
+      {
+        degree: 'Maestrante en Banca y Mercados Financieros',
+        institution: 'Universidad Anáhuac México, Campus Norte',
+      },
+      {
+        degree: 'Licenciado en Administración Financiera',
+        institution: 'Tecnológico de Monterrey',
+      },
+    ],
+    profile: [
+      'Profesional de las finanzas y maestrante en Banca y Mercados Financieros, con experiencia en consultoría de riesgos, operaciones financieras y procesos de valuación en instituciones bancarias.',
+      'Ha desarrollado su trayectoria profesional en TCM Partners y HSBC México, participando en actividades relacionadas con gestión de riesgos, operaciones de mercados y análisis financiero.',
+      'Complementa su experiencia profesional con el desarrollo de proyectos empresariales y tecnológicos orientados al sector financiero, integrando conocimientos de estrategia, finanzas y desarrollo de negocios.',
+    ],
+    email: 'daniel.tzvi@hayya-system.com',
+    phone: '55 4841 5814',
+    linkedin: 'https://www.linkedin.com/in/dalsrb/',
+  },
+];

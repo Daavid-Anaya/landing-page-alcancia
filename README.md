@@ -24,7 +24,7 @@ La página queda en `http://localhost:4321`.
 
 ## A dónde llevan los botones
 
-**Empezar a ahorrar** lleva a `/registro` y **Escríbenos por WhatsApp** a `/whatsapp` del sitio demo (`sitio-web`). Por omisión se asume que el sitio demo corre en `http://localhost:3000`. Para apuntar a otra dirección, define la variable antes de compilar:
+**Probar demo** lleva a la dirección fija `LINKS.demo` de `src/data/site.ts`. **Escríbenos por WhatsApp** lleva a `/whatsapp` del sitio demo (`sitio-web`). Por omisión se asume que el sitio demo corre en `http://localhost:3000`. Para apuntar a otra dirección, define la variable antes de compilar:
 
 ```sh
 PUBLIC_DEMO_URL=https://demo.ejemplo.com pnpm build
