@@ -1,18 +1,19 @@
 ---
 import Coin from './Coin.astro';
 import Icon from './Icon.astro';
-import { LINKS } from '../data/site';
+import { LINKS, publicPath } from '../data/site';
 ---
 
 <section id="empezar" class="pb-20 md:pb-28" aria-labelledby="empezar-titulo">
   <div class="container-page">
     <div
-      class="relative flex flex-col items-start gap-6 overflow-hidden rounded-3xl bg-primary px-6 py-14 text-primary-foreground md:px-14 md:py-20"
+      class="relative flex flex-col gap-10 overflow-hidden rounded-3xl bg-primary px-6 py-14 text-primary-foreground md:px-14 md:py-20 lg:flex-row lg:items-center lg:justify-between"
       data-reveal
     >
+      <!-- The QR card takes this corner on large screens, so the coins only show below it. -->
       <svg
         viewBox="0 0 220 220"
-        class="pointer-events-none absolute -right-8 -bottom-10 w-44 opacity-90 md:right-6 md:w-64"
+        class="pointer-events-none absolute -right-8 -bottom-10 w-44 opacity-90 md:right-6 md:w-64 lg:hidden"
         aria-hidden="true"
       >
         <Coin x={70} y={150} r={46} />
@@ -20,29 +21,47 @@ import { LINKS } from '../data/site';
         <Coin x={118} y={176} r={34} />
       </svg>
 
-      <h2
-        id="empezar-titulo"
-        class="relative max-w-2xl font-normal tracking-tight text-balance"
-        style="font-size: clamp(2.25rem, 1.4rem + 3.6vw, 4rem); line-height: 1.05;"
-      >
-        Empieza hoy, con $50 pesos
-      </h2>
-      <p class="relative max-w-xl text-lg md:text-xl">Desde tu celular, sin trámites y sin descargar nada.</p>
+      <div class="relative flex flex-col items-start gap-6">
+        <h2
+          id="empezar-titulo"
+          class="max-w-2xl font-normal tracking-tight text-balance"
+          style="font-size: clamp(2.25rem, 1.4rem + 3.6vw, 4rem); line-height: 1.05;"
+        >
+          Empieza hoy, con $50 pesos
+        </h2>
+        <p class="max-w-xl text-lg md:text-xl">Desde tu celular, sin trámites y sin descargar nada.</p>
 
-      <div class="relative flex flex-col gap-3 sm:flex-row">
-        <a href={LINKS.register} class="btn bg-background text-foreground hover:brightness-95">
-          Empezar a ahorrar
-          <Icon name="arrow-right" />
-        </a>
-        <a href={LINKS.whatsapp} class="btn border border-current hover:bg-white/10">
-          <Icon name="message-circle" />
-          Escríbenos por WhatsApp
-        </a>
+        <div class="flex flex-col gap-3 sm:flex-row">
+          <a href={LINKS.demo} class="btn bg-background text-foreground hover:brightness-95">
+            Probar demo
+            <Icon name="arrow-right" />
+          </a>
+          <a href={LINKS.whatsapp} class="btn border border-current hover:bg-white/10">
+            <Icon name="message-circle" />
+            Escríbenos por WhatsApp
+          </a>
+        </div>
+
+        <p class="max-w-md text-sm">
+          Solo te escribimos desde nuestro número oficial verificado. Cualquier otro es falso.
+        </p>
       </div>
 
-      <p class="relative max-w-md text-sm">
-        Solo te escribimos desde nuestro número oficial verificado. Cualquier otro es falso.
-      </p>
+      <!-- Scanning only makes sense from another screen, so the QR is hidden on phones and tablets. -->
+      <figure
+        class="relative hidden w-64 shrink-0 flex-col items-center gap-3 rounded-2xl bg-background p-4 text-center text-foreground shadow-raised lg:flex"
+      >
+        <img
+          src={publicPath('qr-demo.svg')}
+          alt="Código QR que abre la demo de Alcancía"
+          width="1023"
+          height="1023"
+          loading="lazy"
+          decoding="async"
+          class="aspect-square w-full rounded-xl bg-white"
+        />
+        <figcaption class="text-sm font-medium text-balance">Escanea con tu celular para abrir la demo</figcaption>
+      </figure>
     </div>
   </div>
 </section>

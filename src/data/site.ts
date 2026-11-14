@@ -5,7 +5,8 @@
 const DEMO_URL = String(import.meta.env.PUBLIC_DEMO_URL ?? 'http://localhost:3000').replace(/\/$/, '');
 
 export const LINKS = {
-  register: `${DEMO_URL}/registro`,
+  /** Destination of every "Probar demo" button. */
+  demo: 'https://www.linkedin.com/in/david-villegas-anaya/',
   whatsapp: `${DEMO_URL}/whatsapp`,
 } as const;
 
@@ -15,7 +16,11 @@ export const NAV = [
   { href: '#seguridad', label: 'Seguridad' },
   { href: '#costos', label: 'Costos' },
   { href: '#preguntas', label: 'Preguntas' },
+  { href: '#equipo', label: 'Nuestro equipo' },
 ] as const;
+
+/** URL of a file in `public/`, respecting the configured base path. */
+export const publicPath = (path: string) => `${import.meta.env.BASE_URL.replace(/\/$/, '')}/${path}`;
 
 export const SEO = {
   title: 'Alcancía · Ahorra para tu retiro, con lo que puedas y cuando puedas',
